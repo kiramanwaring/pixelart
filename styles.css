@@ -1,40 +1,57 @@
 body {
+    padding: 0;
+    margin: 0;
     text-align: center;
 }
-
+#cover{
+    position: fixed;
+    z-index: 10;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.75);
+}
 h1 {
+    padding-top: 200px;
     font-family: Monoton;
     font-size: 70px;
-    margin: 0.2em;
 }
-
+p{
+    font-family: Helvetica;
+    font-size: 2em;
+}
 h2 {
-    margin: 1em 0 0.25em;
+    /*margin: 1em 0 0.25em;*/
 }
 
 h2:first-of-type {
-    margin-top: 0.5em;
+    /*margin-top: 0.5em;*/
 }
 
 table,
 tr,
 td {
-    border: 1px solid black;
+    border: .5px solid grey;
 }
 
 table {
     border-collapse: collapse;
-    margin: 0 auto;
+    margin: 0;
 }
 
 tr {
-    height: 20px;
+    height: 5vh;
+    /*height: 0.934vh;*/
 }
 
 td {
-    width: 20px;
+    width: 4vw;
 }
 
 input[type=number] {
     width: 6em;
+}
+
+#controls{
+    display: none;
 }
