@@ -16,6 +16,8 @@ function makeGrid() {
 			pixelCanvas.children().last().append("<td></td>");
 		}
 	}
+	// console.log($('tr').length);
+	// $('td').attr('height', (500/($('tr').length))+"vh" );
 }
 
 $("#sizePicker").submit(function(e) {
@@ -89,10 +91,6 @@ function randomHexFragment() {
 
 $('body').mousemove(function() {
 	// console.log('MOVE');
-	if ($('#cover').css('display') !== "none"){
-		$('#cover').stop(true, false).slideUp(500);
-	}
-	$('#cover').delay(10000).slideDown(500);
 });
 
 $(document).keypress(function (e) {
@@ -100,11 +98,18 @@ $(document).keypress(function (e) {
 		makeGrid();
 	} else if (e.which==100){
 		drawingToggle = !drawingToggle;
+	} else if (e.which==104){
+		if ($('#cover').css('display') !== "none"){
+			$('#cover').stop(true, false).slideUp(500);
+		}else{
+			$('#cover').slideDown(500);
+		}
 	} else if (e.which==103){
 		console.log("HEY")
         window.location.assign('https://github.com/MichaelManwaring/pixelart');
     }
 });
+
 
 $(makeGrid());
 
