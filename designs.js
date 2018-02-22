@@ -25,18 +25,18 @@ $("#sizePicker").submit(function(e) {
 
 
 $("#pixelCanvas").click(function(e) {
-	console.log(e.target);
+	// console.log(e.target);
 	let pixelToChange = $(e.target);
 	// if the click is dragged across the grid, this function prevents the <tr> from changing color
 	if (pixelToChange.is('td')){
 		pixelToChange.css('background-color', nextColor());
 	}else if (pixelToChange.is('tr')){
-		console.log("row");
+		// console.log("row");
 		pixelToChange.children().each(function() {
 			$(this).css('background-color', incrementDrag());
 		});
 	}else{
-		console.log('table click');
+		// console.log('table click');
 		pixelToChange.children().children().each(function() {
 			$(this).css('background-color', incrementDrag());
 		})
@@ -95,13 +95,16 @@ $('body').mousemove(function() {
 	$('#cover').delay(10000).slideDown(500);
 });
 
-$('body').keypress(function (e) {
+$(document).keypress(function (e) {
 	if (e.which==32){
 		makeGrid();
 	} else if (e.which==100){
 		drawingToggle = !drawingToggle;
-	}
-})
+	} else if (e.which==103){
+		console.log("HEY")
+        window.location.assign('https://github.com/MichaelManwaring/pixelart');
+    }
+});
 
 $(makeGrid());
 
