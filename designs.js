@@ -75,7 +75,7 @@ $("#pixelCanvas").mouseover(function(e) {
 // Random color formulas
 function nextColor() {
 	for (i=0; i<3; i++){
-		draggingColor[i]=(Math.floor(Math.random() * 255));
+		draggingColor[i]=randomPicker(255);
 	}
 	return incrementDrag()
 }
@@ -87,7 +87,7 @@ function randomColor() {
     return hexCode
 }
 function randomHexFragment() {
-    var fragment = (Math.floor(Math.random() * 255).toString(16));
+    var fragment = randomPicker(255).toString(16);
     return fragment.length == 1 ? "0" + fragment : fragment;
 }
 
