@@ -7,29 +7,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
+    <!-- <div id="filter"></div> -->
     <div id="cover">
-        <h1>Soothing Random Pixel Drawing</h1>
-        <div>
-            <p>Press 'h' to hide the instructions and get to work</p>
-            <p>Press 'd' to turn on or off automatic drawing</p>
-            <p>Click the mouse to randomize your color</p>
-            <p>Press 'g' to check out the code on GitHub</p>
-            <br>
-            <br>
-            <br>
-            <p>Sorry, not available on mobile</p>
+        <h1>Soothing Hues Zen Garden</h1>
+        <div id="instructions">
+            <div id="basics">
+                <p>Press the space bar to turn on or off automatic drawing</p>
+                <p>Press 'c' to clear the canvas</p>
+                <p>Click to randomize your color</p>
+                <p>Press 'h' to hide these instructions and get to work!</p>
+                <p>Press 'g' to check out the code on <a href="https://github.com/MichaelManwaring/pixelart" target="_blank">GitHub</a></p>
+            </div>
+            <div id="controls">
+                <h2>Secret Menu:</h2>
+                <form id="sizePicker">
+                    Granularity:
+                    <input type="number" id="inputHeight" name="height" min="1" max="100" value="20">
+                    Stretch:
+                    <input type="number" id="inputStretch" name="width" min="1" max="5" value="3">
+                </form>
+                <br>
+                Color Wonk:
+                <input type="number" id="inputWonk" name="wonk" min="1" max="5" value="3">
+            </div>
         </div>
-
-    <div id="controls">
-        <h2>Choose Grid Size</h2>
-        <form id="sizePicker">
-            Grid Height:
-            <input type="number" id="inputHeight" name="height" min="1" value="20">
-            Grid Width:
-            <input type="number" id="inputWeight" name="width" min="1" value="25">
-            <input type="submit">
-        </form>
-    </div>
     </div>
     <table id="pixelCanvas"></table>
 
