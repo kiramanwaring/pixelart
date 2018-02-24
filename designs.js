@@ -84,7 +84,7 @@ function randomColor() {
 	for(i=0; i<3; i++){
 		hexCode+=randomHexFragment();
 	}
-    return hexCode
+    return hexCode;
 }
 function randomHexFragment() {
     var fragment = randomPicker(255).toString(16);
@@ -94,9 +94,9 @@ function randomHexFragment() {
 // random range selector, use negative values to select between -x to x
 function randomPicker(randomRange) {
 	if (randomRange<0){
-		Math.round(2*randomRange*(Math.random()-0.5));
+		return Math.round(2*randomRange*(Math.random()-0.5));
 	} else {
-		Math.round(randomRange*Math.random());
+		return Math.round(randomRange*Math.random());
 	}
 }
 // key commands
