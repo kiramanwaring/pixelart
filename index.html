@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pixel Art Maker!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soothing Hues</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monoton">
     <link rel="stylesheet" href="styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -9,27 +10,30 @@
 <body>
     <!-- <div id="filter"></div> -->
     <div id="cover">
-        <h1>Soothing Hues Zen Garden</h1>
-        <div id="instructions">
-            <div id="basics">
-                <p>Press the space bar to turn on or off automatic drawing</p>
-                <p>Press 'c' to clear the canvas</p>
-                <p>Click to randomize your color</p>
-                <p>Press 'h' to hide these instructions and get to work!</p>
-                <p>Press 'g' to check out the code on <a href="https://github.com/MichaelManwaring/pixelart" target="_blank">GitHub</a></p>
-            </div>
-            <div id="controls">
-                <h2>Secret Menu:</h2>
-                <form id="sizePicker">
-                    Granularity:
-                    <input type="number" id="inputHeight" name="height" min="1" max="100" value="20">
-                    Stretch:
-                    <input type="number" id="inputStretch" name="width" min="1" max="5" value="3">
-                </form>
-                <br>
-                Color Wonk:
-                <input type="number" id="inputWonk" name="wonk" min="1" max="5" value="3">
-            </div>
+        <h1>Soothing Hues</h1>
+        <h2>Gradient Zen Garden</h2>
+    </div>
+    <div id="instructions">
+        <div id="basics">
+            <p>Click to randomize your color</p>
+            <p>Press 'c' to clear the canvas</p>
+            <p>Press the space bar to toggle automatic drawing</p>
+            <p>Press 'i' to toggle these instructions</p>
+            <p>Press 'g' to check out the code on <a href="https://github.com/MichaelManwaring/pixelart" target="_blank">GitHub</a></p>
+            <p>Try other keys to find hidden features!</p>
+            <!-- <p>Press 'h' to hide the Title</p> -->
+        </div>
+        <div id="controls">
+            <h2>Secret Menu:</h2>
+            <form id="sizePicker">
+                Granularity:
+                <input type="number" id="inputHeight" name="height" min="1" max="100" value="20">
+                Stretch:
+                <input type="number" id="inputStretch" name="width" min="1" max="5" value="3">
+            </form>
+            <br>
+            Color Wonk:
+            <input type="number" id="inputWonk" name="wonk" min="1" max="5" value="3">
         </div>
     </div>
     <table id="pixelCanvas"></table>

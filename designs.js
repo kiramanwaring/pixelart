@@ -52,7 +52,7 @@ $("#pixelCanvas").click(function(e) {
 
 // slowly morphing color formula
 const colorWonk=$("#inputWonk");
-const draggingColor=[200,200,200];
+const draggingColor=[230,180,190];
 function incrementDrag() {
 	let hexDrag="#"
 	for (i=0; i<3; i++){
@@ -61,6 +61,7 @@ function incrementDrag() {
 		dragFragment=draggingColor[i].toString(16)
 		hexDrag+= (dragFragment.length==1 ? "0"+dragFragment : dragFragment);
 	}
+	console.log(draggingColor);
 	return hexDrag;
 }
 
@@ -69,6 +70,9 @@ $("#pixelCanvas").mouseover(function(e) {
 	let dragPixel = $(e.target);
 	if (drawingToggle){
 		dragPixel.css('background-color', incrementDrag());
+	}
+	if ($('#cover').css('display') !== "none"){
+		$('#cover').css('color', incrementDrag());
 	}
 });
 
@@ -105,11 +109,17 @@ $(document).keypress(function (e) {
 		drawingToggle = !drawingToggle;
 	} else if (e.which==(99||67)){
 		makeGrid();
+	} else if (e.which==(105||73)){
+		if ($('#instructions').css('display') !== "none"){
+			$('#instructions').stop(true, false).slideUp(750);
+		}else{
+			$('#instructions').slideDown(750);
+		}
 	} else if (e.which==(104||72)){
 		if ($('#cover').css('display') !== "none"){
-			$('#cover').stop(true, false).slideUp(500);
+			$('#cover').stop(true, false).hide();
 		}else{
-			$('#cover').slideDown(500);
+			$('#cover').show();
 		}
 	} else if (e.which==(102||70)){
 		$("#filter").css("background-color", "rgba(")
@@ -120,6 +130,7 @@ $(document).keypress(function (e) {
         window.location.assign('https://github.com/MichaelManwaring/pixelart');
     }
 });
+
 
 // stop mobile use untill further development
 function mobileWarning() {
@@ -137,3 +148,8 @@ function mobileWarning() {
 	}
 }
 $(mobileWarning());
+$(function() {
+	$('#instructions').delay(7500).slideDown(1000);
+	$('#cover').css('color', incrementDrag()).fadeIn(1000).fadeOut(16000);
+
+})
