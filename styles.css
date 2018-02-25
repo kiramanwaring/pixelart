@@ -5,23 +5,6 @@ body {
     text-align: center;
     font-family: Avenir;
 }
-#filter{
-    position: fixed;
-    z-index: 10;
-    margin: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(255,255,255,0.25)
-}
-#cover{
-    display: none;
-    position: fixed;
-    z-index: -10;
-    margin: 0;
-    height: 100%;
-    width: 100%;
-    /*background-color: rgba(255, 255, 255, .5);*/
-}
 h1 {
     padding-top: 15%;
     font-size: 8vw;
@@ -79,5 +62,16 @@ input[type=number] {
     height: 30%;
     width: 30%;
     left: 70%;
-    background-color: rgba(255,255,255,0.25)
+    top: 0;
+    background-color: rgba(255,255,255,0.75)
+}
+#cover{
+
+    display: none;
+    position: absolute;
+    z-index: -10;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    /*background-color: rgba(255, 255, 255, .5);*/
 }
