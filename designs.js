@@ -97,23 +97,31 @@ function randomHexFragment() {
     let fragment = randomPicker(255).toString(16);
     return fragment.length == 1 ? "0" + fragment : fragment;
 }
-
+// the wandering random color gremlin
 let gremlinOn=false;
+let intervalID;
 let currentPixel=[Math.round(gridHeight.val()/2), Math.round(gridWidth()/2)];
 function theGremlin(times) {
-	let maxPixel=[gridHeight.val(), gridWidth()];
-	for (var j = times; j >= 0; j--) {
-		for (var i = 1; i >= 0; i--) {
-			currentPixel[i]+=randomPicker(-2);
-			if (currentPixel[i]>maxPixel[i]){
-				currentPixel[i]-=3;
-			} else if (currentPixel[i]<0){
-				currentPixel[i]+=3;
+	if (gremlinOn) {
+		clearInterval(intervalID);
+	} else {
+		intervalID= setInterval(function(){
+			let maxPixel=[gridHeight.val(), gridWidth()];
+			for (var j = times; j >= 0; j--) {
+				for (var i = 1; i >= 0; i--) {
+					currentPixel[i]+=randomPicker(-2);
+					if (currentPixel[i]>maxPixel[i]){
+						currentPixel[i]-=3;
+					} else if (currentPixel[i]<0){
+						currentPixel[i]+=3;
+					}
+				}
+				let gremlinPixel=$("#pixel-"+currentPixel[0]+"-"+currentPixel[1]);
+				gremlinPixel.css('background-color', incrementDrag());
 			}
-		}
-		let gremlinPixel=$("#pixel-"+currentPixel[0]+"-"+currentPixel[1]);
-		gremlinPixel.css('background-color', incrementDrag());
+		}, 100);
 	}
+	gremlinOn=!gremlinOn;
 }
 
 // random range selector, use negative values to select between -x to x
@@ -131,33 +139,38 @@ $(document).keypress(function (e) {
 	} else if (e.which==(99||67)){
 		makeGrid();
 	} else if (e.which==(105||73)){
+		// toggle instructions with 'i'
 		if (instructions.css('display') !== "none"){
 			instructions.stop(true, false).slideUp(750);
 		}else{
 			instructions.slideDown(750);
 		}
 	} else if (e.which==(104||72)){
+		// toggle title with 'h'
 		if (appTitle.css('display') !== "none"){
 			appTitle.stop(true, false).hide();
 		}else{
 			appTitle.show();
 		}
 	} else if (e.which==(102||70)){
+		// apply random grey filter with 'f'
 		$('table').css("filter", "grayscale("+randomPicker(100)+"%)");
 	} else if (e.which==(119||87)){
-		if (gremlinOn) {
-			stopInterval();
-		} else {
-			setInterval(function(){
-				theGremlin(100);
-			}, 100);
-		}
-		gremlinOn=!gremlinOn;
+		// toggle the gremlin
+		theGremlin(100);
 	} else if (e.which==(115||83)){
-		controls.css('display')=="none" ? controls.css("display", "block") : controls.css('display', 'none');
-		basics.css('display')=="none" ? basics.css("display", "block") : basics.css('display', 'none');
+		// open the secret controls menu
+		if (instructions.css('display') == "none"){
+			instructions.slideDown(750);
+			controls.css("display", "block");
+			basics.css('display', 'none');
+		} else {
+			controls.css('display')=="none" ? controls.css("display", "block") : controls.css('display', 'none');
+			basics.css('display')=="none" ? basics.css("display", "block") : basics.css('display', 'none');
+		}
 	} else if (e.which==(103||71)){
         window.location.assign('https://github.com/MichaelManwaring/pixelart');
+    // } else {
     }
   	console.log(e.which)
 });

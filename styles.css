@@ -53,6 +53,8 @@ input[type=number] {
 
 #controls{
     display: none;
+    text-align: right;
+    padding-right: 25%;
 }
 #instructions{
     display: none;
