@@ -1,13 +1,4 @@
-// Select color input
-const gridColor=$('#colorPicker');
-// Select size input
-const gridHeight=$("#inputHeight")
-const gridStretch=$("#inputStretch");
-const stretchTable=[0.618, 1, 1.25, 1.618, 2]
-function gridWidth() {
-	return Math.round(stretchTable[gridStretch.val()-1]*gridHeight.val());
-}
-// When size is submitted by the user, call makeGrid()
+// set dob object variables
 const appTitle=$("#app-title")
 const instructions=$("#instructions");
 const basics=$("#basics");
@@ -15,12 +6,23 @@ const controls=$("#controls");
 const pixelCanvas=$('#pixelCanvas');
 const sizePicker=$("#sizePicker")
 let drawingToggle=true;
+// Select color input
+const gridColor=$('#colorPicker');
+// Select size input
+const gridHeight=$("#inputHeight")
+const gridStretch=$("#inputStretch");
+const stretchTable=[1, 1.25, 1.618, 2]
+const stretchSymbol=["1", "5/4", "&phi", "2"]
+function gridWidth() {
+	return Math.round(stretchTable[gridStretch.val()]*gridHeight.val());
+}
 
+// When size is submitted by the user, call makeGrid()
 function makeGrid() {
 	pixelCanvas.empty();
-	for (let i = 1; i < gridHeight.val(); i++) {
+	for (let i = 1; i <= gridHeight.val(); i++) {
 		pixelCanvas.append('<tr></tr>');
-		for (let j = 1; j<gridWidth(); j++) {
+		for (let j = 1; j<=gridWidth(); j++) {
 			pixelCanvas.children().last().append("<td id='pixel-"+i+"-"+j+"'></td>");
 		}
 	}
@@ -31,9 +33,11 @@ sizePicker.change(function(e) {
 	setTimeout(function() {
 		$('table tr td').css('border', 'none');
     }, 500);
+    $('#ratio').text(stretchSymbol[gridStretch.val()+1]);
+    console.log(stretchSymbol[gridStretch.val()-1]);
 });
 
-
+// click function
 
 $("#pixelCanvas").click(function(e) {
 	// console.log(e.target);
@@ -53,21 +57,6 @@ $("#pixelCanvas").click(function(e) {
 		})
 	}
 });
-
-// slowly morphing color formula
-const colorWonk=$("#inputWonk");
-const draggingColor=[255,200,100];
-function incrementDrag() {
-	let hexDrag="#"
-	for (i=0; i<3; i++){
-		draggingColor[i]+=Math.round((2.2**colorWonk.val())*(Math.random() -0.5));
-		draggingColor[i]>255 ? draggingColor[i]=255 : draggingColor[i]<0 ? draggingColor[i]=0 : true;
-		dragFragment=draggingColor[i].toString(16)
-		hexDrag+= (dragFragment.length==1 ? "0"+dragFragment : dragFragment);
-	}
-	return hexDrag;
-}
-
 // drawing function
 $("#pixelCanvas").mouseover(function(e) {
 	let dragPixel = $(e.target);
@@ -78,6 +67,21 @@ $("#pixelCanvas").mouseover(function(e) {
 		appTitle.css('color', incrementDrag());
 	}
 });
+
+// slowly morphing color formula
+const colorWonk=$("#inputWonk");
+const draggingColor=[255,200,100];
+function incrementDrag() {
+	let hexDrag="#"
+	for (i=0; i<3; i++){
+		draggingColor[i]+=Math.round((2**colorWonk.val())*(Math.random() -0.5));
+		draggingColor[i]>255 ? draggingColor[i]=255 : draggingColor[i]<0 ? draggingColor[i]=0 : true;
+		dragFragment=draggingColor[i].toString(16)
+		hexDrag+= (dragFragment.length==1 ? "0"+dragFragment : dragFragment);
+	}
+	return hexDrag;
+}
+
 
 // Random color formulas
 function nextColor() {
@@ -98,30 +102,60 @@ function randomHexFragment() {
     return fragment.length == 1 ? "0" + fragment : fragment;
 }
 // the wandering random color gremlin
+const gremlinSpeed=$('#gremlin-speed');
+const gremlinRange=$('#gremlin-range');
 let gremlinOn=false;
 let intervalID;
-let currentPixel=[Math.round(gridHeight.val()/2), Math.round(gridWidth()/2)];
 function theGremlin(times) {
 	if (gremlinOn) {
 		clearInterval(intervalID);
 	} else {
+		let currentPixel=[Math.round(gridHeight.val()/2), Math.round(gridWidth()/2)];
 		intervalID= setInterval(function(){
 			let maxPixel=[gridHeight.val(), gridWidth()];
 			for (var j = times; j >= 0; j--) {
 				for (var i = 1; i >= 0; i--) {
-					currentPixel[i]+=randomPicker(-2);
+					currentPixel[i]+=randomPicker(-gremlinRange.val());
 					if (currentPixel[i]>maxPixel[i]){
-						currentPixel[i]-=3;
+						currentPixel[i]-=Number(gremlinRange.val());
 					} else if (currentPixel[i]<0){
-						currentPixel[i]+=3;
+						currentPixel[i]+=Number(gremlinRange.val());
 					}
 				}
 				let gremlinPixel=$("#pixel-"+currentPixel[0]+"-"+currentPixel[1]);
 				gremlinPixel.css('background-color', incrementDrag());
+				// console.log(currentPixel)
 			}
-		}, 100);
+		}, gremlinSpeed.val());
 	}
 	gremlinOn=!gremlinOn;
+}
+
+// filter effects
+function filterEffects() {
+	let filterCobmo="blur("+(Math.random()*2)+"px) ";
+	filterCobmo+="brightness("+(0.5+Math.random()/2)+") ";
+	filterCobmo+="contrast("+(100+randomPicker(-50))+"%) ";
+	filterCobmo+="opacity("+(100+randomPicker(-50))+"%) ";
+	filterCobmo+="saturate("+(100+randomPicker(-50))+"%) ";
+	filterCobmo+="sepia("+randomPicker(100)+"%)";
+	return filterCobmo;
+}
+
+let movingOn=false;
+let movingId;
+function movingColors(argument) {
+	if (movingOn){
+		clearInterval(movingId);
+		pixelCanvas.css("filter", "");
+	} else {
+		let colorRotation=0;
+		movingId=setInterval(function(){
+			colorRotation+=1+randomPicker(-2);
+			pixelCanvas.css("filter", "hue-rotate("+colorRotation+"deg)");
+		}, 100);
+	}
+	movingOn=!movingOn;
 }
 
 // random range selector, use negative values to select between -x to x
@@ -136,6 +170,8 @@ function randomPicker(randomRange) {
 $(document).keypress(function (e) {
 	if (e.which==32){
 		drawingToggle = !drawingToggle;
+	} else if (e.which==(101||69)){
+		movingColors();
 	} else if (e.which==(99||67)){
 		makeGrid();
 	} else if (e.which==(105||73)){
@@ -154,10 +190,12 @@ $(document).keypress(function (e) {
 		}
 	} else if (e.which==(102||70)){
 		// apply random grey filter with 'f'
-		$('table').css("filter", "grayscale("+randomPicker(100)+"%)");
+		$('body').css("filter", filterEffects());
+	} else if (e.which==(114||82)){
+		$('body').css("filter", "");
 	} else if (e.which==(119||87)){
 		// toggle the gremlin
-		theGremlin(100);
+		theGremlin(Math.round(gridHeight.val()/9));
 	} else if (e.which==(115||83)){
 		// open the secret controls menu
 		if (instructions.css('display') == "none"){
@@ -168,6 +206,10 @@ $(document).keypress(function (e) {
 			controls.css('display')=="none" ? controls.css("display", "block") : controls.css('display', 'none');
 			basics.css('display')=="none" ? basics.css("display", "block") : basics.css('display', 'none');
 		}
+	} else if (e.which==(98||66)){
+		$('body').css('background-color', randomColor());
+	} else if (e.which==(110||78)){
+		$('body').css('background-color', 'white');
 	} else if (e.which==(103||71)){
         window.location.assign('https://github.com/MichaelManwaring/pixelart');
     // } else {
@@ -191,9 +233,9 @@ function mobileWarning() {
 		makeGrid();
 	}
 }
+// startup code
 $(mobileWarning());
 $(function() {
 	instructions.delay(7500).slideDown(2000);
 	appTitle.css('color', incrementDrag()).fadeIn(1000).fadeOut(6000);
-
 })

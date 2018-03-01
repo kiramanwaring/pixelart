@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
-<body>
+<body class="bigbodyboi">
     <div id="instructions">
         <div id="basics">
             <p>Click to randomize your color</p>
@@ -20,11 +20,15 @@
         </div>
         <div id="controls">
             <h2>Secret Menu:</h2>
-            <form id="sizePicker">
-                <p>Granularity: <input type="range" id="inputHeight" name="height" min="1" max="100" value="20"></p>
-                <p>Stretch:    <input type="range" id="inputStretch" name="width" min="1" max="5" value="3"></p>
-            </form>
             <p>Color Wonk:<input type="range" id="inputWonk" name="wonk" min="1" max="5" value="3"></p>
+            <form id="sizePicker">
+                <p>Granularity: <input type="range" id="inputHeight" name="height" min="2" max="100" value="20"></p>
+                <p>Stretch:    <input type="range" id="inputStretch" name="width" min="0" max="3" value="1"></p>
+            </form>
+            <!-- <span id="ratio">5/4</span> -->
+            <span>Press "w" for the Gremlin</span>
+            <p>Gremlin Speed:<input type="range" id="gremlin-speed" name="speed" min="1" max="500" value="100"></p>
+            <p>Gremlin Range:<input type="range" id="gremlin-range" name="range" min="1" max="10" value="1"></p>
         </div>
     </div>
     <div id="app-title">
