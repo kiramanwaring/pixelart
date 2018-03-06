@@ -12,23 +12,27 @@
         <div id="basics">
             <p>Click to randomize your color</p>
             <p>Press 'c' to clear the canvas</p>
-            <p>Press the space bar to 'lift the pen'</p>
+            <p>Press the space bar to lift and replace the 'pen'</p>
             <p>Press 'i' to hide/show these instructions</p>
             <p>Press 'g' to check out the code on <a href="https://github.com/MichaelManwaring/pixelart" target="_blank">GitHub</a></p>
             <p>Try other keys to find hidden features!</p>
-            <!-- <p>Press 'h' to hide the Title</p> -->
         </div>
         <div id="controls">
             <h2>Secret Menu:</h2>
-            <p>Color Wonk:<input type="range" id="inputWonk" name="wonk" min="1" max="5" value="3"></p>
+            <h3>Canvas:</h3>
             <form id="sizePicker">
                 <p>Granularity: <input type="range" id="inputHeight" name="height" min="2" max="100" value="20"></p>
                 <p>Stretch:    <input type="range" id="inputStretch" name="width" min="0" max="3" value="1"></p>
             </form>
-            <!-- <span id="ratio">5/4</span> -->
-            <span>Press "w" for the Gremlin</span>
-            <p>Gremlin Speed:<input type="range" id="gremlin-speed" name="speed" min="1" max="500" value="100"></p>
-            <p>Gremlin Range:<input type="range" id="gremlin-range" name="range" min="1" max="10" value="1"></p>
+            <h3>Color:</h3>
+            <p>press 'f' for random filters, 'r' to reset filters</p>
+            <p>press 'e' to toggle evolving colors</p>
+            <p>Color Wonk:<input type="range" id="inputWonk" name="wonk" min="1" max="5" value="3"></p>
+            <h3>The Gremlin:</h3>
+            <p>Press "w" to summon the Gremlin</p>
+            <p>'t' to change gremlin modes</p>
+            <p>Gremlin Speed:<input type="range" id="gremlin-speed" name="speed" min="1" max="700" value="100"></p>
+            <p>Gremlin Range:<input type="range" id="gremlin-range" name="range" min="1" max="20" value="2"></p>
         </div>
     </div>
     <div id="app-title">

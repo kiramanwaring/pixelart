@@ -54,14 +54,17 @@ input[type=number] {
 #controls{
     display: none;
     text-align: right;
-    padding-right: 25%;
+    padding-right: 15%;
+}
+#controls p{
+        /*font-size: .7em*/
 }
 #instructions{
     display: none;
     position: fixed;
     z-index: 10;
     margin: 0;
-    height: 30%;
+    /*height: 30%;*/
     width: 30%;
     left: 70%;
     top: 0;
@@ -79,4 +82,7 @@ input[type=number] {
 }
 .blink{
     background-color: rgba(125,125,250,1);
+}
+#gremlin-speed {
+  direction: rtl
 }

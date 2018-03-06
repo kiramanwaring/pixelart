@@ -103,28 +103,80 @@ function randomHexFragment() {
 }
 // the wandering random color gremlin
 const gremlinSpeed=$('#gremlin-speed');
+gremlinSpeed.change(function() {
+	theGremlin(Math.round(gridHeight.val()/9));
+	theGremlin(Math.round(gridHeight.val()/9));
+})
 const gremlinRange=$('#gremlin-range');
+gremlinRange.change(function() {
+	theGremlin(Math.round(gridHeight.val()/9));
+	theGremlin(Math.round(gridHeight.val()/9));
+})
 let gremlinOn=false;
 let intervalID;
-function theGremlin(times) {
+let gremlinCount=0;
+let trails=true;
+function theGremlin() {
 	if (gremlinOn) {
 		clearInterval(intervalID);
 	} else {
 		let currentPixel=[Math.round(gridHeight.val()/2), Math.round(gridWidth()/2)];
 		intervalID= setInterval(function(){
 			let maxPixel=[gridHeight.val(), gridWidth()];
-			for (var j = times; j >= 0; j--) {
-				for (var i = 1; i >= 0; i--) {
-					currentPixel[i]+=randomPicker(-gremlinRange.val());
-					if (currentPixel[i]>maxPixel[i]){
-						currentPixel[i]-=Number(gremlinRange.val());
-					} else if (currentPixel[i]<0){
-						currentPixel[i]+=Number(gremlinRange.val());
+			let gremlinPixel;
+			currentPixel
+			if (trails){
+					for (var i = gremlinRange.val(); i >= 0; i--) {
+						gremlinPixel=undefined;
+						let upPix=$(`#pixel-${currentPixel[0]-1}-${currentPixel[1]}`);
+						let downPix=$(`#pixel-${currentPixel[0]+1}-${currentPixel[1]}`);
+						let leftPix=$(`#pixel-${currentPixel[0]}-${currentPixel[1]-1}`);
+						let rightPix=$(`#pixel-${currentPixel[0]}-${currentPixel[1]+1}`);
+						let moves = [];
+						rightPix.length ? moves.push(rightPix) : true;
+						upPix.length ? moves.push(upPix) : true;
+						leftPix.length ? moves.push(leftPix) : true;
+						downPix.length ? moves.push(downPix) : true;
+						// console.log(moves);
+						move =shuffle(moves);
+						// console.log(moves);
+						let lowest=Number.POSITIVE_INFINITY;
+						moves.forEach(function(pixel) {
+							// console.log(pixel)
+							if (pixel.attr('class')){
+								if (lowest>Number(pixel.attr('class'))){lowest=Number(pixel.attr('class'))};
+							} else {
+								gremlinPixel=pixel;
+							}
+						});
+						if (gremlinPixel && gremlinPixel.length){
+							// console.log(gremlinPixel)
+						} else {
+							moves.forEach(function(pixel) {
+								if (lowest===Number(pixel.attr('class'))){gremlinPixel=pixel};
+							});
+						}
+						gremlinPixel === upPix ? currentPixel[0]-- : gremlinPixel === downPix ? currentPixel[0]++ : gremlinPixel === leftPix ? currentPixel[1]-- : gremlinPixel === rightPix ? currentPixel[1]++ : console.log('MOVE ERROR');
+						// console.log(currentPixel);
+						gremlinPixel.css('background-color', incrementDrag());
+						gremlinCount++;
+						gremlinPixel.removeClass().addClass(gremlinCount.toString());
 					}
+			}else{
+				for (var j = Number(gremlinRange.val()); j >= 0; j--) {
+					for (var i = 1; i >= 0; i--) {
+						currentPixel[i]+=randomPicker(-gremlinRange.val())
+						if (currentPixel[i]>maxPixel[i]){
+							currentPixel[i]-=Number(gremlinRange.val());
+						} else if (currentPixel[i]<0){
+							currentPixel[i]+=Number(gremlinRange.val());
+						}
+					}
+					gremlinPixel=$(`#pixel-${currentPixel[0]}-${currentPixel[1]}`);
+					gremlinPixel.css('background-color', incrementDrag());
+					gremlinCount++;
+					gremlinPixel.removeClass().addClass(gremlinCount.toString());
 				}
-				let gremlinPixel=$("#pixel-"+currentPixel[0]+"-"+currentPixel[1]);
-				gremlinPixel.css('background-color', incrementDrag());
-				// console.log(currentPixel)
 			}
 		}, gremlinSpeed.val());
 	}
@@ -134,11 +186,11 @@ function theGremlin(times) {
 // filter effects
 function filterEffects() {
 	let filterCobmo="blur("+(Math.random()*2)+"px) ";
-	filterCobmo+="brightness("+(0.5+Math.random()/2)+") ";
-	filterCobmo+="contrast("+(100+randomPicker(-50))+"%) ";
-	filterCobmo+="opacity("+(100+randomPicker(-50))+"%) ";
-	filterCobmo+="saturate("+(100+randomPicker(-50))+"%) ";
-	filterCobmo+="sepia("+randomPicker(100)+"%)";
+	filterCobmo+="brightness("+(0.75+Math.random()/2)+") ";
+	filterCobmo+="contrast("+(125+randomPicker(-50))+"%) ";
+	// filterCobmo+="opacity("+(100+randomPicker(-50))+"%) ";
+	filterCobmo+="saturate("+(125+randomPicker(-50))+"%) ";
+	// filterCobmo+="sepia("+randomPicker(100)+"%)";
 	return filterCobmo;
 }
 
@@ -165,6 +217,19 @@ function randomPicker(randomRange) {
 	} else {
 		return Math.round(randomRange*Math.random());
 	}
+}
+// shuffler
+function shuffle (array) {
+  var i = 0
+    , j = 0
+    , temp = null
+
+  for (i = array.length - 1; i > 0; i -= 1) {
+    j = Math.floor(Math.random() * (i + 1))
+    temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
 }
 // key commands
 $(document).keypress(function (e) {
@@ -195,7 +260,12 @@ $(document).keypress(function (e) {
 		$('body').css("filter", "");
 	} else if (e.which==(119||87)){
 		// toggle the gremlin
-		theGremlin(Math.round(gridHeight.val()/9));
+		theGremlin();
+	} else if (e.which==(116||84)){
+		// trails on and off
+		trails=!trails
+		theGremlin();
+		theGremlin();
 	} else if (e.which==(115||83)){
 		// open the secret controls menu
 		if (instructions.css('display') == "none"){
@@ -217,6 +287,14 @@ $(document).keypress(function (e) {
   	console.log(e.which)
 });
 
+// // reverse speed range
+// $(function() {
+//   $("#rangeValue").text($("#gremlin-speed").val());
+
+//   $("#gremlin-speed").on('change input', function() {
+//     $("#rangeValue").text($(this).val());
+//   });
+// });
 
 // stop mobile use untill further development
 function mobileWarning() {
@@ -236,6 +314,7 @@ function mobileWarning() {
 // startup code
 $(mobileWarning());
 $(function() {
+	instructions.slideUp(1);
 	instructions.delay(7500).slideDown(2000);
 	appTitle.css('color', incrementDrag()).fadeIn(1000).fadeOut(6000);
 })
