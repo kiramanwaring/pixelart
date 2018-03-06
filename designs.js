@@ -104,13 +104,13 @@ function randomHexFragment() {
 // the wandering random color gremlin
 const gremlinSpeed=$('#gremlin-speed');
 gremlinSpeed.change(function() {
-	theGremlin(Math.round(gridHeight.val()/9));
-	theGremlin(Math.round(gridHeight.val()/9));
+	theGremlin();
+	theGremlin();
 })
 const gremlinRange=$('#gremlin-range');
 gremlinRange.change(function() {
-	theGremlin(Math.round(gridHeight.val()/9));
-	theGremlin(Math.round(gridHeight.val()/9));
+	theGremlin();
+	theGremlin();
 })
 let gremlinOn=false;
 let intervalID;
@@ -178,7 +178,7 @@ function theGremlin() {
 					gremlinPixel.removeClass().addClass(gremlinCount.toString());
 				}
 			}
-		}, gremlinSpeed.val());
+		}, gremlinSpeed.val()/4);
 	}
 	gremlinOn=!gremlinOn;
 }
@@ -231,6 +231,11 @@ function shuffle (array) {
     array[j] = temp
   }
 }
+
+// click away menu
+instructions.click(function(){
+	instructions.slideUp(750);
+})
 // key commands
 $(document).keypress(function (e) {
 	if (e.which==32){
