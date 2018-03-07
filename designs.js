@@ -163,7 +163,7 @@ function theGremlin() {
 						gremlinPixel.removeClass().addClass(gremlinCount.toString());
 					}
 			}else{
-				for (var j = Number(gremlinRange.val()); j >= 0; j--) {
+				for (var j = Number(gremlinRange.val()**2); j >= 0; j--) {
 					for (var i = 1; i >= 0; i--) {
 						currentPixel[i]+=randomPicker(-gremlinRange.val())
 						if (currentPixel[i]>maxPixel[i]){
@@ -233,7 +233,7 @@ function shuffle (array) {
 }
 
 // click away menu
-instructions.click(function(){
+basics.click(function(){
 	instructions.slideUp(750);
 })
 // key commands
@@ -248,6 +248,8 @@ $(document).keypress(function (e) {
 		// toggle instructions with 'i'
 		if (instructions.css('display') !== "none"){
 			instructions.stop(true, false).slideUp(750);
+			controls.css('display', 'none');
+			basics.css("display", "block")
 		}else{
 			instructions.slideDown(750);
 		}
@@ -273,13 +275,16 @@ $(document).keypress(function (e) {
 		theGremlin();
 	} else if (e.which==(115||83)){
 		// open the secret controls menu
-		if (instructions.css('display') == "none"){
+		if (controls.css('display') == "none"){
 			instructions.slideDown(750);
 			controls.css("display", "block");
 			basics.css('display', 'none');
 		} else {
-			controls.css('display')=="none" ? controls.css("display", "block") : controls.css('display', 'none');
-			basics.css('display')=="none" ? basics.css("display", "block") : basics.css('display', 'none');
+			instructions.slideUp(750);
+			setTimeout(function() {
+				controls.css('display')=="none" ? controls.css("display", "block") : controls.css('display', 'none');
+				basics.css('display')=="none" ? basics.css("display", "block") : basics.css('display', 'none');
+			}, 750)
 		}
 	} else if (e.which==(98||66)){
 		$('body').css('background-color', randomColor());
@@ -322,4 +327,7 @@ $(function() {
 	instructions.slideUp(1);
 	instructions.delay(7500).slideDown(2000);
 	appTitle.css('color', incrementDrag()).fadeIn(1000).fadeOut(6000);
+	setTimeout(function() {
+		basics.append("<p style='italics'>Press 's' for the secret menu<p>");
+	}, 20000);
 })
