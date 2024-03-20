@@ -1,80 +1,86 @@
 // set dob object variables
-const appTitle=$("#app-title")
-const instructions=$("#instructions");
-const basics=$("#basics");
-const controls=$("#controls");
-const pixelCanvas=$('#pixelCanvas');
-const sizePicker=$("#sizePicker")
+const appTitle=document.getElementById("app-title")
+const instructions=document.getElementById("instructions");
+const basics=document.getElementById("basics");
+const controls=document.getElementById("controls");
+const pixelCanvas=document.getElementById("pixelCanvas");
+const sizePicker=document.getElementById("sizePicker")
 let drawingToggle=true;
 // Select color input
-const gridColor=$('#colorPicker');
+const gridColor=document.getElementById('colorPicker');
 // Select size input
-const gridHeight=$("#inputHeight")
-const gridStretch=$("#inputStretch");
+const gridHeight=document.getElementById("inputHeight")
+const gridStretch=document.getElementById("inputStretch");
 const stretchTable=[1, 1.25, 1.618, 2]
 const stretchSymbol=["1", "5/4", "&phi", "2"]
 function gridWidth() {
-	return Math.round(stretchTable[gridStretch.val()]*gridHeight.val());
+	return Math.round(stretchTable[gridStretch.value]*gridHeight.value);
 }
 
 // When size is submitted by the user, call makeGrid()
 function makeGrid() {
-	pixelCanvas.empty();
-	for (let i = 1; i <= gridHeight.val(); i++) {
-		pixelCanvas.append('<tr></tr>');
+	while (pixelCanvas.firstChild) {
+		pixelCanvas.removeChild(pixelCanvas.firstChild);
+	}
+	for (let i = 1; i <= gridHeight.value; i++) {
+		let newRow = "<tr id='row-"+i+"'></tr>";
+		pixelCanvas.innerHTML = pixelCanvas.innerHTML + newRow;
+		let currentRow = document.getElementById("row-"+i);
 		for (let j = 1; j<=gridWidth(); j++) {
-			pixelCanvas.children().last().append("<td id='pixel-"+i+"-"+j+"'></td>");
+			let newPixel = "<td id='pixel-"+i+"-"+j+"'></td>"
+			currentRow.innerHTML = currentRow.innerHTML + newPixel;
 		}
 	}
 }
-sizePicker.change(function(e) {
+
+sizePicker.addEventListener('change',function(){
 	makeGrid();
-	$('table tr td').css('border', ".5px solid grey")
+	document.getElementsByTagName('table tr td').style.border = ".5px solid grey";
 	setTimeout(function() {
-		$('table tr td').css('border', 'none');
+		document.getElementsByTagName('table tr td').style.border = 'none';
     }, 500);
-    $('#ratio').text(stretchSymbol[gridStretch.val()+1]);
-    console.log(stretchSymbol[gridStretch.val()-1]);
+    document.getElementById('ratio').text(stretchSymbol[gridStretch.value+1]);
+    console.log(stretchSymbol[gridStretch.value-1]);
 });
 
 // click function
 
-$("#pixelCanvas").click(function(e) {
+document.getElementById("pixelCanvas").click(function(e) {
 	// console.log(e.target);
 	let pixelToChange = $(e.target);
 	// if the click is dragged across the grid, this function prevents the <tr> from changing color
 	if (pixelToChange.is('td')){
-		pixelToChange.css('background-color', nextColor());
+		pixelToChange.style.backgroundColor = nextColor();
 	// this allows you to create gradients across rows
 	}else if (pixelToChange.is('tr')){
 		pixelToChange.children().each(function() {
-			$(this).css('background-color', incrementDrag());
+			this.style.backgroundColor = incrementDrag();
 		});
 	// creates full screen gradient
 	}else{
 		pixelToChange.children().children().each(function() {
-			$(this).css('background-color', incrementDrag());
+			this.style.backgroundColor = incrementDrag();
 		})
 	}
 });
 // drawing function
-$("#pixelCanvas").mouseover(function(e) {
-	let dragPixel = $(e.target);
+document.getElementById("pixelCanvas").addEventListener('mouseover',function(e){
+	let dragPixel = e.target;
 	if (drawingToggle){
-		dragPixel.css('background-color', incrementDrag());
+		dragPixel.style.backgroundColor = incrementDrag();
 	}
-	if (appTitle.css('display') !== "none"){
-		appTitle.css('color', incrementDrag());
+	if (appTitle.style.display !== "none"){
+		appTitle.style.color = incrementDrag();
 	}
 });
 
 // slowly morphing color formula
-const colorWonk=$("#inputWonk");
+const colorWonk=document.getElementById("inputWonk");
 const draggingColor=[255,200,100];
 function incrementDrag() {
 	let hexDrag="#"
 	for (i=0; i<3; i++){
-		draggingColor[i]+=Math.round((2**colorWonk.val())*(Math.random() -0.5));
+		draggingColor[i]+=Math.round((2**colorWonk.value)*(Math.random() -0.5));
 		draggingColor[i]>255 ? draggingColor[i]=255 : draggingColor[i]<0 ? draggingColor[i]=0 : true;
 		dragFragment=draggingColor[i].toString(16)
 		hexDrag+= (dragFragment.length==1 ? "0"+dragFragment : dragFragment);
@@ -102,13 +108,13 @@ function randomHexFragment() {
     return fragment.length == 1 ? "0" + fragment : fragment;
 }
 // the wandering random color gremlin
-const gremlinSpeed=$('#gremlin-speed');
-gremlinSpeed.change(function() {
+const gremlinSpeed=document.getElementById('gremlin-speed');
+gremlinSpeed.addEventListener('change',function(){
 	theGremlin();
 	theGremlin();
 })
-const gremlinRange=$('#gremlin-range');
-gremlinRange.change(function() {
+const gremlinRange=document.getElementById('gremlin-range');
+gremlinRange.addEventListener('change',function(){
 	theGremlin();
 	theGremlin();
 })
@@ -120,13 +126,13 @@ function theGremlin() {
 	if (gremlinOn) {
 		clearInterval(intervalID);
 	} else {
-		let currentPixel=[Math.round(gridHeight.val()/2), Math.round(gridWidth()/2)];
+		let currentPixel=[Math.round(gridHeight.value/2), Math.round(gridWidth()/2)];
 		intervalID= setInterval(function(){
-			let maxPixel=[gridHeight.val(), gridWidth()];
+			let maxPixel=[gridHeight.value, gridWidth()];
 			let gremlinPixel;
 			currentPixel
 			if (trails){
-					for (var i = gremlinRange.val(); i >= 0; i--) {
+					for (var i = gremlinRange.value; i >= 0; i--) {
 						gremlinPixel=undefined;
 						let upPix=$(`#pixel-${currentPixel[0]-1}-${currentPixel[1]}`);
 						let downPix=$(`#pixel-${currentPixel[0]+1}-${currentPixel[1]}`);
@@ -158,27 +164,27 @@ function theGremlin() {
 						}
 						gremlinPixel === upPix ? currentPixel[0]-- : gremlinPixel === downPix ? currentPixel[0]++ : gremlinPixel === leftPix ? currentPixel[1]-- : gremlinPixel === rightPix ? currentPixel[1]++ : console.log('MOVE ERROR');
 						// console.log(currentPixel);
-						gremlinPixel.css('background-color', incrementDrag());
+						gremlinPixel.style.backgroundColor = incrementDrag();
 						gremlinCount++;
 						gremlinPixel.removeClass().addClass(gremlinCount.toString());
 					}
 			}else{
-				for (var j = Number(gremlinRange.val()**2); j >= 0; j--) {
+				for (var j = Number(gremlinRange.value**2); j >= 0; j--) {
 					for (var i = 1; i >= 0; i--) {
-						currentPixel[i]+=randomPicker(-gremlinRange.val())
+						currentPixel[i]+=randomPicker(-gremlinRange.value)
 						if (currentPixel[i]>maxPixel[i]){
-							currentPixel[i]-=Number(gremlinRange.val());
+							currentPixel[i]-=Number(gremlinRange.value);
 						} else if (currentPixel[i]<0){
-							currentPixel[i]+=Number(gremlinRange.val());
+							currentPixel[i]+=Number(gremlinRange.value);
 						}
 					}
 					gremlinPixel=$(`#pixel-${currentPixel[0]}-${currentPixel[1]}`);
-					gremlinPixel.css('background-color', incrementDrag());
+					gremlinPixel.style.backgroundColor = incrementDrag();
 					gremlinCount++;
 					gremlinPixel.removeClass().addClass(gremlinCount.toString());
 				}
 			}
-		}, gremlinSpeed.val()/4);
+		}, gremlinSpeed.value/4);
 	}
 	gremlinOn=!gremlinOn;
 }
@@ -237,97 +243,99 @@ basics.click(function(){
 	instructions.slideUp(750);
 })
 // key commands
-$(document).keypress(function (e) {
-	if (e.which==32){
+document.addEventListener("keydown", (event) => {
+	if (event.key==32){
 		drawingToggle = !drawingToggle;
-	} else if (e.which==(101||69)){
+	} else if (event.key==(101||69)){
 		movingColors();
-	} else if (e.which==(99||67)){
+	} else if (event.key==(99||67)){
 		makeGrid();
-	} else if (e.which==(105||73)){
+	} else if (event.key==(105||73)){
 		// toggle instructions with 'i'
-		if (instructions.css('display') !== "none"){
+		if (instructions.style.display !== "none"){
 			instructions.stop(true, false).slideUp(750);
-			controls.css('display', 'none');
+			controls.style.display = 'none';
 			basics.css("display", "block")
 		}else{
 			instructions.slideDown(750);
 		}
-	} else if (e.which==(104||72)){
+	} else if (event.key==(104||72)){
 		// toggle title with 'h'
-		if (appTitle.css('display') !== "none"){
+		if (appTitle.style.display !== "none"){
 			appTitle.stop(true, false).hide();
 		}else{
 			appTitle.show();
 		}
-	} else if (e.which==(102||70)){
+	} else if (event.key==(102||70)){
 		// apply random grey filter with 'f'
-		$('body').css("filter", filterEffects());
-	} else if (e.which==(114||82)){
-		$('body').css("filter", "");
-	} else if (e.which==(119||87)){
+		document.getElementById('body').css("filter", filterEffects());
+	} else if (event.key==(114||82)){
+		document.getElementById('body').css("filter", "");
+	} else if (event.key==(119||87)){
 		// toggle the gremlin
 		theGremlin();
-	} else if (e.which==(116||84)){
+	} else if (event.key==(116||84)){
 		// trails on and off
 		trails=!trails
 		theGremlin();
 		theGremlin();
-	} else if (e.which==(115||83)){
+	} else if (event.key==(115||83)){
 		// open the secret controls menu
-		if (controls.css('display') == "none"){
+		if (controls.style.display == "none"){
 			instructions.slideDown(750);
-			controls.css("display", "block");
-			basics.css('display', 'none');
+			controls.style.display = "block";
+			basics.style.display = 'none';
 		} else {
 			instructions.slideUp(750);
 			setTimeout(function() {
-				controls.css('display')=="none" ? controls.css("display", "block") : controls.css('display', 'none');
-				basics.css('display')=="none" ? basics.css("display", "block") : basics.css('display', 'none');
+				controls.style.display =="none" ? controls.css("display", "block") : controls.style.display = 'none';
+				basics.style.display =="none" ? basics.css("display", "block") : basics.style.display = 'none';
 			}, 750)
 		}
-	} else if (e.which==(98||66)){
-		$('body').css('background-color', randomColor());
-	} else if (e.which==(110||78)){
-		$('body').css('background-color', 'white');
-	} else if (e.which==(103||71)){
+	} else if (event.key==(98||66)){
+		document.getElementById('body').style.backgroundColor = randomColor();
+	} else if (event.key==(110||78)){
+		document.getElementById('body').style.backgroundColor = 'white';
+	} else if (event.key==(103||71)){
         window.location.assign('https://github.com/MichaelManwaring/pixelart');
     // } else {
     }
-  	console.log(e.which)
+  	console.log(event.key)
 });
 
 // // reverse speed range
 // $(function() {
-//   $("#rangeValue").text($("#gremlin-speed").val());
+//   document.getElementById("rangeValue").text(document.getElementById("gremlin-speed").value);
 
-//   $("#gremlin-speed").on('change input', function() {
-//     $("#rangeValue").text($(this).val());
+//   document.getElementById("gremlin-speed").on('change input', function() {
+//     document.getElementById("rangeValue").text(this.value);
 //   });
 // });
 
 // stop mobile use untill further development
-function mobileWarning() {
-	if(window.innerWidth <= 800
-		|| navigator.userAgent.match(/webOS/i)
-		|| navigator.userAgent.match(/iPhone/i)
-		|| navigator.userAgent.match(/iPad/i)
-		|| navigator.userAgent.match(/iPod/i)
-		|| navigator.userAgent.match(/BlackBerry/i)
-		|| navigator.userAgent.match(/Windows Phone/i)
-	) {
-    	instructions.empty().append("<h2>Sorry, not yet available on mobile</h2>");
-	}else{
-		makeGrid();
-	}
-}
+// function mobileWarning() {
+// 	if(window.innerWidth <= 800
+// 		|| navigator.userAgent.match(/webOS/i)
+// 		|| navigator.userAgent.match(/iPhone/i)
+// 		|| navigator.userAgent.match(/iPad/i)
+// 		|| navigator.userAgent.match(/iPod/i)
+// 		|| navigator.userAgent.match(/BlackBerry/i)
+// 		|| navigator.userAgent.match(/Windows Phone/i)
+// 	) {
+//     	instructions.empty().append("<h2>Sorry, not yet available on mobile</h2>");
+// 	}else{
+// 		makeGrid();
+// 	}
+// }
 // startup code
-$(mobileWarning());
-$(function() {
-	instructions.slideUp(1);
-	instructions.delay(7500).slideDown(2000);
-	appTitle.css('color', incrementDrag()).fadeIn(1000).fadeOut(6000);
-	setTimeout(function() {
-		basics.append("<p style='italics'>Press 's' for the secret menu<p>");
-	}, 20000);
-})
+// $(mobileWarning());
+function beginSoothing() {
+	// instructions.slideUp(1);
+	// instructions.delay(7500).slideDown(2000);
+	// appTitle.style.color = incrementDrag().fadeIn(1000).fadeOut(6000);
+	// setTimeout(function() {
+		// basics.append("<p style='italics'>Press 's' for the secret menu<p>");
+		// }, 20000);
+	}
+	
+	makeGrid();
