@@ -1,3 +1,5 @@
+// import incrementDrag from "./color";
+
 // set dob object variables
 const appTitle=document.getElementById("app-title")
 const instructions=document.getElementById("instructions");
@@ -7,7 +9,7 @@ const pixelCanvas=document.getElementById("pixelCanvas");
 const sizePicker=document.getElementById("sizePicker")
 let drawingToggle=true;
 // Select color input
-const gridColor=document.getElementById('colorPicker');
+// const gridColor=document.getElementById('colorPicker');
 // Select size input
 const gridHeight=document.getElementById("inputHeight")
 const gridStretch=document.getElementById("inputStretch");
@@ -238,12 +240,15 @@ function shuffle (array) {
   }
 }
 
-// click away menu
-basics.click(function(){
-	instructions.slideUp(750);
-})
+// // click away menu
+// basics.click(function(){
+// 	instructions.slideUp(750);
+// })
+
+
 // key commands
 document.addEventListener("keydown", (event) => {
+	console.log(event.key)
 	if (event.key==32){
 		drawingToggle = !drawingToggle;
 	} else if (event.key==(101||69)){
@@ -279,7 +284,7 @@ document.addEventListener("keydown", (event) => {
 		trails=!trails
 		theGremlin();
 		theGremlin();
-	} else if (event.key==(115||83)){
+	} else if (event.key==('s')){
 		// open the secret controls menu
 		if (controls.style.display == "none"){
 			instructions.slideDown(750);
@@ -296,11 +301,8 @@ document.addEventListener("keydown", (event) => {
 		document.getElementById('body').style.backgroundColor = randomColor();
 	} else if (event.key==(110||78)){
 		document.getElementById('body').style.backgroundColor = 'white';
-	} else if (event.key==(103||71)){
-        window.location.assign('https://github.com/MichaelManwaring/pixelart');
     // } else {
     }
-  	console.log(event.key)
 });
 
 // // reverse speed range
